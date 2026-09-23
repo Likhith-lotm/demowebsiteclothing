@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AURA — Modern Indian Silhouettes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="promo-strip">
+  Free shipping on orders over ₹2,999 · Easy returns
+</div>
+
+<header class="nav" id="nav">
+  <div class="nav-inner">
+
+    <button class="burger" id="menuBtn" aria-label="Open menu">☰</button>
+
+    <a class="logo" href="#">AURA</a>
+
+    <nav class="links">
+      <a href="#">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="#collections">Collections</a>
+      <a href="#about">About</a>
+      <a href="admin.html" class="admin-link">Admin</a>
+    </nav>
+
+    <button class="cart-btn" id="cartBtn">
+      Bag <span class="cart-count" id="cartCount">0</span>
+    </button>
+
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <span class="eyebrow">New Collection · AW26</span>
+
+    <h1>
+      Modern Indian<br>
+      <em>Silhouettes</em>
+    </h1>
+
+    <p>
+      Hand-finished pieces in breathable fabrics,
+      cut for the way you actually live.
+    </p>
+
+    <a href="#shop" class="btn btn-solid">Shop Now</a>
+  </div>
+</section>
+
+<section class="section" id="collections">
+
+  <div class="section-head">
+    <span class="eyebrow">Curated</span>
+    <h2>Shop by Category</h2>
+  </div>
+
+  <div class="cat-grid">
+
+    <a class="cat-card"
+       style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&q=80')"
+       href="#shop">
+
+      <div>
+        <span>Dresses</span>
+        <h3>Fluid & feminine</h3>
+      </div>
+
+    </a>
+
+    <a class="cat-card"
+       style="background-image:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80')"
+       href="#shop">
+
+      <div>
+        <span>Co-ords</span>
+        <h3>Made to match</h3>
+      </div>
+
+    </a>
+
+    <a class="cat-card"
+       style="background-image:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=80')"
+       href="#shop">
+
+      <div>
+        <span>Kurtas</span>
+        <h3>Modern heritage</h3>
+      </div>
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<section class="section alt" id="shop">
+
+  <div class="section-head">
+    <span class="eyebrow">The Edit</span>
+    <h2>Shop the collection</h2>
+  </div>
+
+  <div class="shop-tools">
+
+    <div class="search-wrap">
+      <span>⌕</span>
+
+      <input
+        id="productSearch"
+        type="search"
+        placeholder="Search dresses, kurtas, co-ords..."
+        autocomplete="off"
+      >
+
+      <button
+        id="clearSearch"
+        type="button"
+        aria-label="Clear search">
+        ×
+      </button>
+
+    </div>
+
+    <span class="search-count" id="searchCount"></span>
+
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="product-grid" id="productGrid"></div>
+
+</section>
+
+
+<section class="section">
+  <div id="promo" class="promo"></div>
+</section>
+
+
+<section class="section story" id="about">
+
+  <div class="story-img"></div>
+
+  <div class="story-text">
+
+    <span class="eyebrow">Our Story</span>
+
+    <h2>The AURA Story</h2>
+
+    <p>
+      We began with a simple idea: clothing that carries heritage
+      without costuming it. Small batches, thoughtful fabrics and
+      silhouettes designed for real life.
+    </p>
+
+    <p>
+      Every collection is deliberately edited so each piece earns
+      its place.
+    </p>
+
+  </div>
+
+</section>
+
+
+<section class="section">
+
+  <div class="section-head">
+    <span class="eyebrow">Loved By You</span>
+    <h2>Customer Reviews</h2>
+  </div>
+
+  <div class="reviews">
+
+    <blockquote>
+      <p>“The kurta set fits like it was stitched for me.”</p>
+      <cite>Meera R.</cite>
+    </blockquote>
+
+    <blockquote>
+      <p>“The colours don't fade, and that's rare at this price.”</p>
+      <cite>Ananya S.</cite>
+    </blockquote>
+
+    <blockquote>
+      <p>“Wore the co-ord to a wedding and to work.”</p>
+      <cite>Divya K.</cite>
+    </blockquote>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <div class="newsletter">
+
+    <h2>Join the list</h2>
+
+    <p>
+      Early access to drops and private sales.
+    </p>
+
+    <form
+      class="nl-form"
+      onsubmit="event.preventDefault();this.reset();alert('Subscribed ✓')">
+
+      <input
+        type="email"
+        placeholder="your@email.com"
+        required>
+
+      <button>Subscribe</button>
+
+    </form>
+
+  </div>
+
+
+  <div class="foot-grid">
+
+    <div>
+      <h3>AURA</h3>
+      <p>Modern Indian silhouettes, made slowly.</p>
+    </div>
+
+    <div>
+      <h5>Shop</h5>
+      <a href="#shop">New In</a>
+      <a href="#shop">Dresses</a>
+      <a href="#shop">Co-ords</a>
+    </div>
+
+    <div>
+      <h5>Help</h5>
+      <a href="#">Shipping</a>
+      <a href="#">Returns</a>
+      <a href="#">Size Guide</a>
+    </div>
+
+    <div>
+      <h5>Contact</h5>
+      <a href="mailto:hello@aura.in">hello@aura.in</a>
+      <a href="tel:+919800000000">+91 98000 00000</a>
+    </div>
+
+  </div>
+
+
+  <div class="foot-bottom">
+    <span>© 2026 AURA</span>
+    <span>Crafted in India</span>
+  </div>
+
+</footer>
+
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu-head">
+    <strong>AURA</strong>
+    <button id="closeMenu">×</button>
+  </div>
+
+  <a href="#">Home</a>
+  <a href="#shop">Shop</a>
+  <a href="#collections">Collections</a>
+  <a href="#about">About</a>
+  <a href="admin.html">Admin</a>
+
+</div>
+
+
+<!-- CART -->
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="cart" id="cart">
+
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <button id="closeCart">×</button>
+  </div>
+
+  <div class="cart-body" id="cartBody"></div>
+
+  <div class="cart-foot">
+
+    <div class="cart-total">
+      <span>Subtotal</span>
+      <strong id="cartTotal">₹0</strong>
+    </div>
+
+    <button
+      class="btn btn-solid"
+      id="checkoutBtn"
+      style="width:100%">
+      Checkout via WhatsApp
+    </button>
+
+  </div>
+
+</aside>
+
+
+<!-- WHATSAPP CHECKOUT -->
+
+<div class="checkout-modal" id="checkoutModal">
+
+  <div class="checkout-card">
+
+    <button class="modal-close" id="checkoutClose">×</button>
+
+    <span class="eyebrow">Order on WhatsApp</span>
+
+    <h2>Complete your order</h2>
+
+    <p>
+      Send your order to AURA on WhatsApp.
+      We will confirm availability and share the
+      payment / UPI details with you.
+    </p>
+
+    <label for="customerName">Name</label>
+    <input
+      id="customerName"
+      placeholder="Your full name">
+
+    <label for="customerPhone">Phone</label>
+    <input
+      id="customerPhone"
+      type="tel"
+      placeholder="10-digit mobile number">
+
+    <label for="customerAddress">Delivery address</label>
+
+    <textarea
+      id="customerAddress"
+      placeholder="House / street / city / PIN"></textarea>
+
+    <button
+      class="btn btn-solid"
+      id="whatsappCheckout">
+      Continue to WhatsApp
+    </button>
+
+    <small>
+      No payment is collected on this demo checkout page.
+    </small>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

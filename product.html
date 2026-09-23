@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1">
+
+  <title>AURA — Product</title>
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="nav solid">
+
+  <div class="nav-inner">
+
+    <button
+      class="burger"
+      id="menuBtn"
+      aria-label="Open menu">
+      ☰
+    </button>
+
+    <a class="logo" href="index.html">
+      AURA
+    </a>
+
+    <nav class="links">
+
+      <a href="index.html">Home</a>
+
+      <a href="index.html#shop">
+        Shop
+      </a>
+
+      <a href="admin.html" class="admin-link">
+        Admin
+      </a>
+
+    </nav>
+
+    <button class="cart-btn" id="cartBtn">
+      Bag
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="detail">
+
+  <section>
+    <div id="detailRoot"></div>
+  </section>
+
+  <section class="detail-info">
+    <div id="infoRoot"></div>
+  </section>
+
+</main>
+
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+
+  <div class="mobile-menu-head">
+
+    <strong>AURA</strong>
+
+    <button id="closeMenu">
+      ×
+    </button>
+
+  </div>
+
+  <a href="index.html">Home</a>
+  <a href="index.html#shop">Shop</a>
+  <a href="index.html#collections">Collections</a>
+  <a href="index.html#about">About</a>
+  <a href="admin.html">Admin</a>
+
+</div>
+
+
+<!-- CART -->
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="cart" id="cart">
+
+  <div class="cart-head">
+
+    <h3>Your Bag</h3>
+
+    <button id="closeCart">
+      ×
+    </button>
+
+  </div>
+
+  <div
+    class="cart-body"
+    id="cartBody">
+  </div>
+
+  <div class="cart-foot">
+
+    <div class="cart-total">
+
+      <span>Subtotal</span>
+
+      <strong id="cartTotal">
+        ₹0
+      </strong>
+
+    </div>
+
+    <button
+      class="btn btn-solid"
+      id="checkoutBtn"
+      style="width:100%">
+      Checkout via WhatsApp
+    </button>
+
+  </div>
+
+</aside>
+
+
+<!-- WHATSAPP CHECKOUT -->
+
+<div
+  class="checkout-modal"
+  id="checkoutModal">
+
+  <div class="checkout-card">
+
+    <button
+      class="modal-close"
+      id="checkoutClose">
+      ×
+    </button>
+
+    <span class="eyebrow">
+      Order on WhatsApp
+    </span>
+
+    <h2>
+      Complete your order
+    </h2>
+
+    <p>
+      Send your order to AURA on WhatsApp.
+      We will confirm availability and share the
+      payment / UPI details with you.
+    </p>
+
+    <label for="customerName">
+      Name
+    </label>
+
+    <input
+      id="customerName"
+      placeholder="Your full name">
+
+
+    <label for="customerPhone">
+      Phone
+    </label>
+
+    <input
+      id="customerPhone"
+      type="tel"
+      placeholder="10-digit mobile number">
+
+
+    <label for="customerAddress">
+      Delivery address
+    </label>
+
+    <textarea
+      id="customerAddress"
+      placeholder="House / street / city / PIN">
+    </textarea>
+
+
+    <button
+      class="btn btn-solid"
+      id="whatsappCheckout">
+      Continue to WhatsApp
+    </button>
+
+    <small>
+      No payment is collected on this demo checkout page.
+    </small>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>

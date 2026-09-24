@@ -42,6 +42,10 @@
         Shop
       </a>
 
+      <button class="nav-category-btn" type="button" data-category-toggle>Categories</button>
+
+      <a href="hot-deals.html" class="hot-deals-link">Hot Deals</a>
+
       <a href="admin.html" class="admin-link">
         Admin
       </a>
@@ -57,6 +61,13 @@
 
 </header>
 
+<div class="category-panel" id="categoryPanel">
+  <div class="category-panel-inner">
+    <div><strong>Women</strong><span>Everyday and occasion dressing</span><button data-category="Dresses">Dresses</button><button data-category="Kurtas">Kurtas</button><button data-category="Co-ords">Co-ords</button></div>
+    <div><strong>Collections</strong><span>Browse the AURA edit</span><button data-category="Dresses">Dresses</button><button data-category="Co-ords">Co-ords</button><button data-category="Kurtas">Kurtas</button></div>
+    <div><strong>Shop</strong><span>Quick ways to explore</span><button data-category="All">All pieces</button><button data-open-hot-deals>Hot Deals</button><a href="index.html#collections">Shop by category</a></div>
+  </div>
+</div>
 
 <main class="detail">
 
@@ -87,6 +98,7 @@
 
   <a href="index.html">Home</a>
   <a href="index.html#shop">Shop</a>
+  <div class="mobile-category-group"><button class="mobile-category-toggle" type="button">Categories <span>+</span></button><div class="mobile-category-list"><button data-category="Dresses">Dresses</button><button data-category="Kurtas">Kurtas</button><button data-category="Co-ords">Co-ords</button><button data-category="All">All pieces</button><a href="hot-deals.html">Hot Deals</a></div></div>
   <a href="index.html#collections">Collections</a>
   <a href="index.html#about">About</a>
   <a href="admin.html">Admin</a>
@@ -186,14 +198,26 @@
       placeholder="10-digit mobile number">
 
 
+    <label for="customerEmail">Email</label>
+    <input id="customerEmail" type="email" placeholder="you@example.com">
+
     <label for="customerAddress">
       Delivery address
     </label>
 
     <textarea
       id="customerAddress"
-      placeholder="House / street / city / PIN">
+      placeholder="House / street / area">
     </textarea>
+
+    <label for="customerCity">City *</label>
+    <input id="customerCity" placeholder="City">
+
+    <label for="customerState">State *</label>
+    <input id="customerState" placeholder="State">
+
+    <label for="customerPin">PIN *</label>
+    <input id="customerPin" inputmode="numeric" maxlength="6" placeholder="6-digit PIN">
 
 
     <button

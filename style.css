@@ -226,3 +226,36 @@ footer{background:var(--ink);color:var(--sand)}.newsletter{text-align:center;pad
   .price{font-size:.9rem}
   .card-cat{font-size:.56rem}
 }
+
+/* ===== CATEGORY NAVIGATION + HOT DEALS — SAME AURA STYLING ===== */
+body{overflow-x:hidden}
+.nav-category-btn{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;padding:0;color:inherit}
+.hot-deals-link{color:var(--accent)!important}
+.category-panel{position:fixed;top:78px;left:0;right:0;z-index:55;background:var(--bone);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 18px 40px rgba(31,28,24,.12);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px);transition:.22s ease}
+.category-panel.on{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.category-panel-inner{max-width:1280px;margin:auto;padding:1.8rem 3rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.category-panel-inner>div{display:flex;flex-direction:column;align-items:flex-start}
+.category-panel-inner strong{font-family:var(--serif);font-size:1.25rem;font-weight:400;margin-bottom:.15rem}
+.category-panel-inner span{font-size:.65rem;color:var(--muted);margin-bottom:.55rem}
+.category-panel-inner button,.category-panel-inner a{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:.28rem 0;color:var(--ink)}
+.category-panel-inner button:hover,.category-panel-inner a:hover{color:var(--accent)}
+.mobile-category-group{border-bottom:1px solid var(--line)}
+.mobile-category-toggle{display:flex!important;width:100%;justify-content:space-between;align-items:center;padding:1rem .2rem!important;border:0!important}
+.mobile-category-list{display:none;padding:0 0 .5rem .8rem}
+.mobile-category-group.on .mobile-category-list{display:block}
+.mobile-category-list button,.mobile-category-list a{display:block;width:100%;text-align:left;padding:.7rem .2rem;border:0;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.mobile-category-list button:hover,.mobile-category-list a:hover{color:var(--accent)}
+.deals-page{padding-top:10rem;min-height:70vh}
+.deals-intro{color:var(--muted);max-width:520px;margin:.8rem auto 1rem}
+.deals-page .section-head h1{font-size:clamp(3rem,7vw,5rem);margin:.5rem 0}
+.deals-page .product-grid{margin-top:2rem}
+
+@media(max-width:950px){
+  .category-panel{display:none}
+  .nav-category-btn,.hot-deals-link{display:none}
+}
+@media(max-width:600px){
+  .deals-page{padding-top:7rem;padding-left:1rem;padding-right:1rem}
+  .deals-page .section-head{margin-bottom:1.8rem}
+  .deals-page .product-grid{margin-top:1rem}
+}

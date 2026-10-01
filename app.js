@@ -1,7 +1,7 @@
 const KEY='aura_demo_v2'; const CH=('BroadcastChannel' in window)?new BroadcastChannel('aura_demo_sync'):null;
 const FALLBACK='https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=900&q=80';
 const SEED=[
-{id:1,name:'Ivory Chanderi Kurta',cat:'Kurtas',price:3490,old:4200,tag:'Sale',stock:4,images:['https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=900&q=80','https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&q=80'],sizes:['S','M','L','XL'],desc:'A softly structured kurta in breathable Chanderi-inspired fabric.',active:true,featured:true},
+{id:1,name:'Ivory Chanderi Kurta',cat:'Kurtas',price:3490,old:4200,tag:'Sale',stock:4,images:['https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=900&q=80','https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=900&q=80'],sizes:['S','M','L','XL'],desc:'A softly structured kurta in breathable Chanderi-inspired fabric.',active:true,featured:true},
 {id:2,name:'Terracotta Co-ord Set',cat:'Co-ords',price:5250,old:null,tag:'New',stock:12,images:['https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=900&q=80','https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80'],sizes:['S','M','L'],desc:'An easy two-piece silhouette designed for day-to-evening dressing.',active:true,featured:true},
 {id:3,name:'Sage Linen Wrap Dress',cat:'Dresses',price:4890,old:null,tag:'',stock:8,images:['https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=900&q=80'],sizes:['S','M','L','XL'],desc:'A relaxed wrap dress with a flattering waist and natural texture.',active:true},
 {id:4,name:'Indigo Block-Print Dress',cat:'Dresses',price:4150,old:5200,tag:'Sale',stock:3,images:['https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=900&q=80','https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=900&q=80'],sizes:['S','M','L'],desc:'Hand-inspired block-print character in a fluid everyday dress.',active:true},
@@ -92,6 +92,11 @@ document.querySelector('[data-new-arrivals-shop]')?.addEventListener('click',()=
  document.getElementById('shop')?.scrollIntoView({behavior:'smooth',block:'start'});
 });
 
+document.getElementById('newsletterForm')?.addEventListener('submit',event=>{
+ event.preventDefault();
+ document.getElementById('newsletterNote').textContent='Newsletter sign-up is not connected in this showcase yet.';
+ event.target.reset();
+});
 
 if(document.getElementById('wishlistGrid')){renderWishlistPage()}
 if(document.getElementById('hotDealsGrid')){
@@ -99,11 +104,40 @@ if(document.getElementById('hotDealsGrid')){
  const renderDeals=()=>{const items=Store.all().filter(p=>p.active!==false&&Number(p.old)>Number(p.price));const count=document.getElementById('dealCount');if(count)count.textContent=`${items.length} ${items.length===1?'deal':'deals'}`;grid.innerHTML=items.length?items.map(p=>`<article class="card"><a href="product.html?id=${p.id}"><div class="card-img">${wishButton(p)}<span class="tag sale">${Math.round((1-p.price/p.old)*100)}% Off</span><img src="${p.images?.[0]||FALLBACK}" alt="${esc(p.name)}"></div><div class="card-info"><span class="card-cat">${esc(p.cat)}</span><h4>${esc(p.name)}</h4><div class="price"><strong>${inr(p.price)}</strong><del>${inr(p.old)}</del></div></div></a></article>`).join(''):`<div class="no-results"><h3>No hot deals right now</h3><p>Check back soon for special prices.</p><a class="btn btn-solid" href="index.html#shop">Shop all pieces</a></div>`;updateWishlistButtons()};renderDeals();Store.onChange(renderDeals)}
 
 function cartApi(){
- let cart=JSON.parse(sessionStorage.getItem('aura_cart')||'[]');
+ let cart;
+ try{
+  const stored=JSON.parse(sessionStorage.getItem('aura_cart')||'[]');
+  cart=Array.isArray(stored)?stored:[];
+ }catch{
+  cart=[];
+ }
  const save=()=>{sessionStorage.setItem('aura_cart',JSON.stringify(cart));document.querySelectorAll('#cartCount').forEach(e=>e.textContent=cart.reduce((s,x)=>s+x.q,0));};
- window.addToCart=(id,qty=1,size='')=>{const p=Store.all().find(x=>x.id==id);if(!p)return;let x=cart.find(i=>i.id==id&&i.size===size);x?x.q+=qty:cart.push({...p,q:qty,size});save();toast('Added to bag')};
+ window.addToCart=(id,qty=1,size='')=>{
+  const p=Store.all().find(x=>x.id==id&&x.active!==false);
+  if(!p)return;
+  const stock=Math.max(0,Number(p.stock)||0);
+  const inCart=cart.filter(i=>i.id==id).reduce((sum,i)=>sum+(Number(i.q)||0),0);
+  const add=Math.min(Math.max(0,Number(qty)||0),stock-inCart);
+  if(!add){toast(stock?'Only '+stock+' available':'This piece is out of stock');return}
+  let x=cart.find(i=>i.id==id&&i.size===size);
+  x?x.q+=add:cart.push({...p,q:add,size});
+  save();
+  toast(add<qty?'Quantity adjusted to available stock':'Added to bag');
+ };
  window.removeCart=(id,size)=>{cart=cart.filter(x=>!(x.id==id&&x.size===size));save();drawCart()};
- window.changeQty=(id,size,d)=>{let x=cart.find(i=>i.id==id&&i.size===size);if(x){x.q+=d;if(x.q<1)removeCart(id,size)}save();drawCart()};
+ window.changeQty=(id,size,d)=>{
+  let x=cart.find(i=>i.id==id&&i.size===size);
+  if(!x)return;
+  if(d>0){
+   const stock=Math.max(0,Number(Store.all().find(p=>p.id==id)?.stock)||0);
+   const inCart=cart.filter(i=>i.id==id).reduce((sum,i)=>sum+(Number(i.q)||0),0);
+   if(inCart>=stock){toast('No more stock available');return}
+  }
+  x.q+=d;
+  if(x.q<1)removeCart(id,size);
+  save();
+  drawCart();
+ };
  window.drawCart=()=>{const body=document.getElementById('cartBody');if(!body)return;body.innerHTML=cart.length?cart.map(x=>`<div class="cart-item"><img src="${x.images?.[0]||FALLBACK}"><div><h4>${esc(x.name)}</h4><small>${x.size?'Size '+esc(x.size)+' · ':''}${inr(x.price)}</small><div class="qty-row"><div class="qty-control"><button onclick="changeQty(${x.id},'${esc(x.size)}',-1)">−</button><span>${x.q}</span><button onclick="changeQty(${x.id},'${esc(x.size)}',1)">+</button></div></div></div></div>`).join(''):'<p class="empty">Your bag is empty.</p>';document.getElementById('cartTotal').textContent=inr(cart.reduce((s,x)=>s+x.price*x.q,0))};
  window.openCart=()=>{document.getElementById('cart')?.classList.add('on');document.getElementById('overlay')?.classList.add('on');drawCart()};
  document.getElementById('cartBtn')?.addEventListener('click',openCart);document.getElementById('closeCart')?.addEventListener('click',()=>{document.getElementById('cart').classList.remove('on');document.getElementById('overlay').classList.remove('on')});document.getElementById('overlay')?.addEventListener('click',()=>{document.getElementById('cart').classList.remove('on');document.getElementById('overlay').classList.remove('on')});save();
@@ -174,9 +208,37 @@ document.getElementById('checkoutModal')?.addEventListener('click',e=>{if(e.targ
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCheckout()});
 
 if(document.getElementById('detailRoot')){
- const id=new URLSearchParams(location.search).get('id'),p=Store.all().find(x=>x.id==id)||Store.all()[0];let selected=0,size=p.sizes?.[0]||'';
- const draw=()=>{document.getElementById('detailRoot').innerHTML=`<div class="gallery-main"><img id="mainImg" src="${p.images[selected]||FALLBACK}"></div><div class="thumbs">${(p.images||[]).map((im,i)=>`<button class="${i===selected?'active':''}" onclick="window.selImg(${i})"><img src="${im}"></button>`).join('')}</div>`;document.getElementById('infoRoot').innerHTML=`${p.tag?`<span class="eyebrow">${esc(p.tag)}</span>`:''}<div class="detail-title-row"><h1>${esc(p.name)}</h1>${wishButton(p)}</div><div class="detail-price">${inr(p.price)} ${p.old?`<span class="detail-old">${inr(p.old)}</span>`:''}</div><p class="detail-desc">${esc(p.desc||'A thoughtfully designed piece made for everyday wear.')}</p><div class="stock">${p.stock<=5?'Only '+p.stock+' pieces left — order soon.':p.stock+' pieces available.'}</div><label>Size</label><div class="size-grid">${(p.sizes||[]).map(s=>`<button class="size-btn ${s===size?'active':''}" onclick="window.selSize('${s}')">${s}</button>`).join('')}</div><div class="qty-row"><div class="qty-control"><button onclick="window.dec()">−</button><span id="dq">1</span><button onclick="window.inc()">+</button></div><button class="btn btn-solid" onclick="addToCart(${p.id},+document.getElementById('dq').textContent,'${size}')">Add to Bag</button></div><div class="related"><h3>Why you'll love it</h3><p class="detail-desc">Multiple views, clear pricing, stock visibility and size selection give customers the information they need before buying.</p></div>`};
- window.selImg=i=>{selected=i;draw()};window.selSize=s=>{size=s;draw()};let q=1;window.inc=()=>{q++;document.getElementById('dq').textContent=q};window.dec=()=>{q=Math.max(1,q-1);document.getElementById('dq').textContent=q};draw();
+ const requestedId=new URLSearchParams(location.search).get('id');
+ const products=Store.all();
+ const p=requestedId?products.find(x=>String(x.id)===requestedId&&x.active!==false):products.find(x=>x.active!==false);
+ const detailRoot=document.getElementById('detailRoot');
+ const infoRoot=document.getElementById('infoRoot');
+ if(!p){
+  infoRoot.innerHTML='<div class="no-results"><h3>Piece not found</h3><p>This piece may have sold out or moved on.</p><a class="btn btn-solid" href="index.html#shop">Explore the collection</a></div>';
+ }else{
+  const images=Array.isArray(p.images)&&p.images.length?p.images:[FALLBACK];
+  const sizes=Array.isArray(p.sizes)?p.sizes:[];
+  const stock=Math.max(0,Number(p.stock)||0);
+  let selected=0,size=sizes[0]||'',quantity=1;
+  const draw=()=>{
+   detailRoot.innerHTML=`<div class="gallery-main"><img id="mainImg" src="${esc(images[selected]||FALLBACK)}" alt="${esc(p.name)}"></div><div class="thumbs">${images.map((image,index)=>`<button type="button" class="${index===selected?'active':''}" data-image-index="${index}" aria-label="View image ${index+1}"><img src="${esc(image)}" alt=""></button>`).join('')}</div>`;
+   infoRoot.innerHTML=`${p.tag?`<span class="eyebrow">${esc(p.tag)}</span>`:''}<div class="detail-title-row"><h1>${esc(p.name)}</h1>${wishButton(p)}</div><div class="detail-price">${inr(p.price)} ${p.old?`<span class="detail-old">${inr(p.old)}</span>`:''}</div><p class="detail-desc">${esc(p.desc||'A thoughtfully designed piece made for everyday wear.')}</p><div class="stock" aria-live="polite">${stock===0?'Currently unavailable':stock<=5?`Only ${stock} pieces left — order soon.`:`${stock} pieces available.`}</div><label>Size</label><div class="size-grid">${sizes.length?sizes.map(s=>`<button type="button" class="size-btn ${s===size?'active':''}" data-size="${esc(s)}" aria-pressed="${s===size}">${esc(s)}</button>`).join(''):'<span class="detail-desc">One size</span>'}</div><div class="qty-row"><div class="qty-control"><button type="button" data-quantity="-1" aria-label="Decrease quantity" ${quantity<=1?'disabled':''}>−</button><span id="dq" aria-live="polite">${quantity}</span><button type="button" data-quantity="1" aria-label="Increase quantity" ${quantity>=stock?'disabled':''}>+</button></div><button class="btn btn-solid" id="detailAdd" type="button" ${stock===0?'disabled':''}>${stock===0?'Out of stock':'Add to Bag'}</button></div><div class="related"><h3>Thoughtfully considered</h3><p class="detail-desc">Designed for comfort, versatility and a little more ease in the everyday.</p></div>`;
+  };
+  detailRoot.addEventListener('click',event=>{
+   const button=event.target.closest('[data-image-index]');
+   if(!button)return;
+   selected=Number(button.dataset.imageIndex);
+   draw();
+  });
+  infoRoot.addEventListener('click',event=>{
+   const sizeButton=event.target.closest('[data-size]');
+   if(sizeButton){size=sizeButton.dataset.size;draw();return}
+   const quantityButton=event.target.closest('[data-quantity]');
+   if(quantityButton){quantity=Math.max(1,Math.min(stock,quantity+Number(quantityButton.dataset.quantity)));draw();return}
+   if(event.target.closest('#detailAdd'))window.addToCart(p.id,quantity,size);
+  });
+  draw();
+ }
 }
 
 
@@ -223,5 +285,11 @@ document.addEventListener('click',e=>{
  if(catItem){e.preventDefault();openCategory(catItem.dataset.category);return}
 });
 addEventListener('resize',()=>{if(document.getElementById('categoryPanel')?.classList.contains('on'))positionCategoryPanel()});
+const mainNav=document.getElementById('nav');
+if(mainNav&&!mainNav.classList.contains('solid')){
+ const updateNav=()=>mainNav.classList.toggle('solid',scrollY>40);
+ updateNav();
+ addEventListener('scroll',updateNav,{passive:true});
+}
 addEventListener('storage',e=>{if(e.key===WISH_KEY){updateWishlistButtons();if(document.getElementById('wishlistGrid'))renderWishlistPage()}});
 addEventListener('aura:wishlist',()=>{updateWishlistButtons();if(document.getElementById('wishlistGrid'))renderWishlistPage()});

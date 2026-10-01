@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AURA — Modern Indian Silhouettes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -16,16 +19,15 @@
 
     <button class="burger" id="menuBtn" aria-label="Open menu">☰</button>
 
-    <a class="logo" href="#">AURA</a>
+    <a class="logo" href="#top">AURA</a>
 
     <nav class="links">
-      <a href="#">Home</a>
+      <a href="#top">Home</a>
       <a href="#shop">Shop</a>
       <button class="nav-category-btn" type="button" data-category-toggle>Categories</button>
       <a href="hot-deals.html" class="hot-deals-link">Hot Deals</a>
       <a href="#collections">Collections</a>
       <a href="#about">About</a>
-      <a href="admin.html" class="admin-link">Admin</a>
     </nav>
 
     <a class="wishlist-btn desktop-wishlist" href="wishlist.html" aria-label="Wishlist">♡ <span class="wishlist-count" id="wishlistCount">0</span></a>
@@ -37,9 +39,9 @@
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" id="top">
   <div class="hero-content">
-    <span class="eyebrow">New Collection · AW26</span>
+    <span class="eyebrow">A considered wardrobe · 2026</span>
 
     <h1>
       Modern Indian<br>
@@ -47,14 +49,12 @@
     </h1>
 
     <p>
-      Hand-finished pieces in breathable fabrics,
-      cut for the way you actually live.
+      Modern Indian dressing, thoughtfully made for wherever the day takes you.
     </p>
 
     <a href="#shop" class="btn btn-solid">Shop Now</a>
-    <div></div>
-    
   </div>
+  <a class="scroll-cue" href="#seasonal" aria-label="Scroll to explore">Discover AURA</a>
 </section>
 <div class="promo-strip">
   Free shipping on orders over ₹2,999 · Easy returns
@@ -229,26 +229,26 @@
 <section class="section">
 
   <div class="section-head">
-    <span class="eyebrow">Loved By You</span>
-    <h2>Customer Reviews</h2>
+    <span class="eyebrow">The AURA point of view</span>
+    <h2>Considered in every detail</h2>
   </div>
 
-  <div class="reviews">
-
-    <blockquote>
-      <p>“The kurta set fits like it was stitched for me.”</p>
-      <cite>Meera R.</cite>
-    </blockquote>
-
-    <blockquote>
-      <p>“The colours don't fade, and that's rare at this price.”</p>
-      <cite>Ananya S.</cite>
-    </blockquote>
-
-    <blockquote>
-      <p>“Wore the co-ord to a wedding and to work.”</p>
-      <cite>Divya K.</cite>
-    </blockquote>
+  <div class="reviews brand-pillars">
+    <article>
+      <span class="pillar-index">01</span>
+      <h3>Rooted, never nostalgic</h3>
+      <p>Indian craft and familiar forms, interpreted for the way we dress now.</p>
+    </article>
+    <article>
+      <span class="pillar-index">02</span>
+      <h3>Made to be lived in</h3>
+      <p>Ease, thoughtful details and versatility belong in the same wardrobe.</p>
+    </article>
+    <article>
+      <span class="pillar-index">03</span>
+      <h3>Less, but considered</h3>
+      <p>A deliberately edited collection where every piece has a place.</p>
+    </article>
 
   </div>
 
@@ -265,9 +265,7 @@
       Early access to drops and private sales.
     </p>
 
-    <form
-      class="nl-form"
-      onsubmit="event.preventDefault();this.reset();alert('Subscribed ✓')">
+    <form class="nl-form" id="newsletterForm">
 
       <input
         type="email"
@@ -277,6 +275,7 @@
       <button>Subscribe</button>
 
     </form>
+    <p class="newsletter-note" id="newsletterNote" aria-live="polite"></p>
 
   </div>
 
@@ -328,13 +327,12 @@
     <button id="closeMenu">×</button>
   </div>
 
-  <a href="#">Home</a>
+  <a href="#top">Home</a>
   <a href="#shop">Shop</a>
   <div class="mobile-category-group"><button class="mobile-category-toggle" type="button">Categories <span>+</span></button><div class="mobile-category-list"><button data-category="Dresses">Dresses</button><button data-category="Kurtas">Kurtas</button><button data-category="Co-ords">Co-ords</button><button data-category="All">All pieces</button><a href="hot-deals.html">Hot Deals</a></div></div>
   <a href="#collections">Collections</a>
   <a href="#about">About</a>
   <a href="wishlist.html">Wishlist</a>
-  <a href="admin.html">Admin</a>
 
 </div>
 

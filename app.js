@@ -35,18 +35,63 @@ function renderWishlistPage(){
 }
 
 
-if(document.getElementById('productGrid')){
- const grid=document.getElementById('productGrid'),filters=document.getElementById('filters');let active=new URLSearchParams(location.search).get('category')||'All',cart=JSON.parse(sessionStorage.getItem('aura_cart')||'[]');
- const render=()=>{const items=Store.all().filter(p=>p.active!==false),cats=['All',...new Set(items.map(p=>p.cat))],camp=activeCampaign();
-  document.getElementById('promo').innerHTML=camp?`<div><span class="eyebrow" style="color:#d9c0a5">${esc(camp.label)}</span><h2>${esc(camp.title)}</h2><p>${esc(camp.text)}</p><a class="btn" style="background:var(--sand);color:var(--ink)" href="#shop">Shop the sale</a></div><div class="promo-media" style="background-image:url('${camp.image||FALLBACK}')"></div>`:'';
-  filters.innerHTML=cats.map(c=>`<button class="chip ${c===active?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
-  const list=active==='All'?items:items.filter(p=>p.cat===active);
-  grid.innerHTML=list.map(p=>`<article class="card"><a href="product.html?id=${p.id}"><div class="card-img">${wishButton(p)}${p.tag?`<span class="tag ${p.tag.toLowerCase()}">${esc(p.tag)}</span>`:''}<img src="${p.images?.[0]||FALLBACK}" alt="${esc(p.name)}"></div><div class="card-info"><span class="card-cat">${esc(p.cat)}</span><h4>${esc(p.name)}</h4><div class="price"><strong>${inr(p.price)}</strong>${p.old?`<del>${inr(p.old)}</del>`:''}</div>${p.stock<=5?`<div class="stock-note">Only ${p.stock} left</div>`:''}</div></a></article>`).join('');
-  updateWishlistButtons();
-  filters.onclick=e=>{let b=e.target.closest('.chip');if(b){active=b.dataset.c;render()}};
- };
- render();Store.onChange(render);
+function productCard(p){
+ return `<article class="card aura-reveal"><a href="product.html?id=${p.id}"><div class="card-img">${wishButton(p)}${p.tag?`<span class="tag ${p.tag.toLowerCase()}">${esc(p.tag)}</span>`:''}<img src="${p.images?.[0]||FALLBACK}" alt="${esc(p.name)}" loading="lazy"></div><div class="card-info"><span class="card-cat">${esc(p.cat)}</span><h4>${esc(p.name)}</h4><div class="price"><strong>${inr(p.price)}</strong>${p.old?`<del>${inr(p.old)}</del>`:''}</div>${p.stock<=5?`<div class="stock-note">Only ${p.stock} left</div>`:''}</div></a></article>`;
 }
+
+function renderNewArrivals(){
+ const grid=document.getElementById('newArrivalsGrid');
+ if(!grid)return;
+ const items=Store.all().filter(p=>p.active!==false).filter(p=>String(p.tag||'').toLowerCase()==='new').slice(0,4);
+ const fallback=Store.all().filter(p=>p.active!==false&&p.featured&&!items.some(x=>x.id===p.id)).slice(0,4-items.length);
+ const list=[...items,...fallback].slice(0,4);
+ grid.innerHTML=list.length?list.map(productCard).join(''):`<div class="no-results"><h3>New pieces are on the way</h3><p>Check back soon for the next AURA drop.</p></div>`;
+ updateWishlistButtons();
+ window.AuraMotion?.refresh();
+}
+
+if(document.getElementById('productGrid')){
+ const grid=document.getElementById('productGrid'),filters=document.getElementById('filters'),search=document.getElementById('productSearch'),count=document.getElementById('searchCount');
+ let active=new URLSearchParams(location.search).get('category')||'All';
+ if(!['All','Dresses','Kurtas','Co-ords'].includes(active))active='All';
+ let query='';
+ const render=()=>{
+  const items=Store.all().filter(p=>p.active!==false),cats=['All',...new Set(items.map(p=>p.cat))],camp=activeCampaign();
+  const promo=document.getElementById('promo');
+  if(promo)promo.innerHTML=camp?`<div><span class="eyebrow" style="color:#d9c0a5">${esc(camp.label)}</span><h2>${esc(camp.title)}</h2><p>${esc(camp.text)}</p><a class="btn" style="background:var(--sand);color:var(--ink)" href="#shop">Shop the sale</a></div><div class="promo-media" style="background-image:url('${camp.image||FALLBACK}')"></div>`:'';
+  filters.innerHTML=cats.map(c=>`<button class="chip ${c===active?'on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+  const q=query.trim().toLowerCase();
+  const filtered=(active==='All'?items:items.filter(p=>p.cat===active)).filter(p=>!q||`${p.name} ${p.cat} ${p.desc||''}`.toLowerCase().includes(q));
+  grid.innerHTML=filtered.length?filtered.map(productCard).join(''):`<div class="no-results"><h3>No pieces found</h3><p>Try another search or category.</p></div>`;
+  if(count)count.textContent=`${filtered.length} ${filtered.length===1?'piece':'pieces'}`;
+  updateWishlistButtons();
+  window.AuraMotion?.refresh();
+ };
+ filters.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;active=b.dataset.c;query='';if(search)search.value='';render()};
+ search?.addEventListener('input',()=>{query=search.value;render()});
+ document.getElementById('clearSearch')?.addEventListener('click',()=>{query='';if(search)search.value='';render();search?.focus()});
+ render();
+ renderNewArrivals();
+ Store.onChange(()=>{render();renderNewArrivals()});
+}
+
+// Category cards and seasonal edits use the same real product filters as the shop.
+document.addEventListener('click',e=>{
+ const card=e.target.closest('[data-shop-category]');
+ if(!card)return;
+ e.preventDefault();
+ const category=card.dataset.shopCategory||'All';
+ const grid=document.getElementById('productGrid');
+ if(!grid){location.href=category==='All'?'index.html#shop':`index.html?category=${encodeURIComponent(category)}#shop`;return}
+ const chip=[...document.querySelectorAll('.chip')].find(x=>x.dataset.c===category);
+ if(chip)chip.click();
+ document.getElementById('shop')?.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
+document.querySelector('[data-new-arrivals-shop]')?.addEventListener('click',()=>{
+ document.getElementById('shop')?.scrollIntoView({behavior:'smooth',block:'start'});
+});
+
 
 if(document.getElementById('wishlistGrid')){renderWishlistPage()}
 if(document.getElementById('hotDealsGrid')){
@@ -137,36 +182,46 @@ if(document.getElementById('detailRoot')){
 
 // Wishlist interactions are local to this browser and persist across pages.
 updateWishlistCount();
+function positionCategoryPanel(){
+ const nav=document.getElementById('nav'),panel=document.getElementById('categoryPanel');
+ if(nav&&panel)panel.style.top=Math.round(nav.getBoundingClientRect().bottom)+'px';
+}
+function openCategory(category){
+ const panel=document.getElementById('categoryPanel');
+ panel?.classList.remove('on');
+ document.getElementById('mobileMenu')?.classList.remove('on');
+ document.getElementById('overlay')?.classList.remove('on');
+ if(!category)return;
+ const grid=document.getElementById('productGrid');
+ if(grid){
+   const chip=[...document.querySelectorAll('.chip')].find(x=>x.dataset.c===category);
+   if(chip)chip.click();
+   else if(category==='All')location.href='index.html#shop';
+   document.getElementById('shop')?.scrollIntoView({behavior:'smooth',block:'start'});
+ }else{
+   location.href='index.html?category='+encodeURIComponent(category)+'#shop';
+ }
+}
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-wishlist]');
- if(b){e.preventDefault();e.stopPropagation();toggleWishlist(b.dataset.wishlist);updateWishlistButtons();if(document.getElementById('wishlistGrid'))renderWishlistPage();}
+ if(b){e.preventDefault();e.stopPropagation();toggleWishlist(b.dataset.wishlist);updateWishlistButtons();if(document.getElementById('wishlistGrid'))renderWishlistPage();return}
  const menu=e.target.closest('#menuBtn');
- if(menu){document.getElementById('mobileMenu')?.classList.add('on');document.getElementById('overlay')?.classList.add('on')}
- if(e.target.closest('#closeMenu')){document.getElementById('mobileMenu')?.classList.remove('on');document.getElementById('overlay')?.classList.remove('on')}
+ if(menu){document.getElementById('mobileMenu')?.classList.add('on');document.getElementById('overlay')?.classList.add('on');return}
+ if(e.target.closest('#closeMenu')){document.getElementById('mobileMenu')?.classList.remove('on');document.getElementById('overlay')?.classList.remove('on');return}
  const cat=e.target.closest('[data-category-toggle]');
- if(cat){document.getElementById('categoryPanel')?.classList.toggle('on')}
- const mt=e.target.closest('.mobile-category-toggle');
- if(mt){const list=mt.nextElementSibling;list?.classList.toggle('on');const s=mt.querySelector('span');if(s)s.textContent=list?.classList.contains('on')?'−':'+'}
- const catItem=e.target.closest('[data-category]');
- if(catItem){
-   const category=catItem.dataset.category;
-   if(category){
-     e.preventDefault();
-     const panel=document.getElementById('categoryPanel');
-     panel?.classList.remove('on');
-     document.getElementById('mobileMenu')?.classList.remove('on');
-     document.getElementById('overlay')?.classList.remove('on');
-     if(document.getElementById('productGrid')){
-       const chip=[...document.querySelectorAll('.chip')].find(x=>x.dataset.c===category);
-       chip?.click();
-       document.getElementById('shop')?.scrollIntoView({behavior:'smooth'});
-     }else if(category==='All'){
-       location.href='index.html#shop';
-     }else{
-       location.href='index.html?category='+encodeURIComponent(category)+'#shop';
-     }
-   }
+ if(cat){
+   e.preventDefault();
+   const panel=document.getElementById('categoryPanel');
+   if(panel){positionCategoryPanel();panel.classList.toggle('on')}
+   return;
  }
+ const mt=e.target.closest('.mobile-category-toggle');
+ if(mt){const list=mt.nextElementSibling;list?.classList.toggle('on');const span=mt.querySelector('span');if(span)span.textContent=list?.classList.contains('on')?'−':'+';return}
+ const card=e.target.closest('[data-shop-category]');
+ if(card){e.preventDefault();openCategory(card.dataset.shopCategory);return}
+ const catItem=e.target.closest('[data-category]');
+ if(catItem){e.preventDefault();openCategory(catItem.dataset.category);return}
 });
+addEventListener('resize',()=>{if(document.getElementById('categoryPanel')?.classList.contains('on'))positionCategoryPanel()});
 addEventListener('storage',e=>{if(e.key===WISH_KEY){updateWishlistButtons();if(document.getElementById('wishlistGrid'))renderWishlistPage()}});
 addEventListener('aura:wishlist',()=>{updateWishlistButtons();if(document.getElementById('wishlistGrid'))renderWishlistPage()});

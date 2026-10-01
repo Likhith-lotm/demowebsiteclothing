@@ -60,6 +60,34 @@
   Free shipping on orders over ₹2,999 · Easy returns
 </div>
 
+<!-- SEASONAL EDIT -->
+<section class="section seasonal-edit" id="seasonal">
+  <div class="section-head aura-reveal">
+    <span class="eyebrow">The AURA Calendar</span>
+    <h2>Dressed for the moment</h2>
+    <p class="section-intro">Four ways to enter the AURA wardrobe — from everyday ease to occasion dressing.</p>
+  </div>
+
+  <div class="season-grid">
+    <button class="season-card season-card-tall aura-reveal" type="button" data-shop-category="Dresses" style="--season-image:url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=85')">
+      <span class="season-kicker">01 · Occasion</span>
+      <span class="season-copy"><strong>Wedding & Occasion</strong><small>Fluid dresses for invitations, dinners and evenings.</small><em>Explore dresses →</em></span>
+    </button>
+    <button class="season-card aura-reveal" type="button" data-shop-category="Kurtas" style="--season-image:url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1200&q=85')">
+      <span class="season-kicker">02 · Festive</span>
+      <span class="season-copy"><strong>Festive Layers</strong><small>Modern heritage silhouettes with an easy rhythm.</small><em>Explore kurtas →</em></span>
+    </button>
+    <button class="season-card aura-reveal" type="button" data-shop-category="Co-ords" style="--season-image:url('https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=1200&q=85')">
+      <span class="season-kicker">03 · Celebration</span>
+      <span class="season-copy"><strong>Celebration Sets</strong><small>Co-ordinated pieces made to move together.</small><em>Explore co-ords →</em></span>
+    </button>
+    <button class="season-card aura-reveal" type="button" data-shop-category="All" style="--season-image:url('https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=85')">
+      <span class="season-kicker">04 · Everyday</span>
+      <span class="season-copy"><strong>Everyday Ease</strong><small>Breathable silhouettes designed for real life.</small><em>Explore everything →</em></span>
+    </button>
+  </div>
+</section>
+
 <!-- DESKTOP CATEGORIES -->
 <div class="category-panel" id="categoryPanel">
   <div class="category-panel-inner">
@@ -68,6 +96,16 @@
     <div><strong>Shop</strong><span>Quick ways to explore</span><button data-category="All">All pieces</button><button data-open-hot-deals>Hot Deals</button><a href="#collections">Shop by category</a></div>
   </div>
 </div>
+<section class="section new-arrivals" id="new-arrivals">
+  <div class="section-head aura-reveal">
+    <span class="eyebrow">Just In</span>
+    <h2>New Arrivals</h2>
+    <p class="section-intro">Fresh pieces added to the AURA edit.</p>
+  </div>
+  <div class="new-arrivals-grid" id="newArrivalsGrid"></div>
+  <div class="section-action aura-reveal"><a href="#shop" class="btn btn-ghost" data-new-arrivals-shop>View all pieces</a></div>
+</section>
+
 <section class="section" id="collections">
 
   <div class="section-head">
@@ -78,6 +116,7 @@
   <div class="cat-grid">
 
     <a class="cat-card"
+       data-shop-category="Dresses"
        style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=900&q=80')"
        href="#shop">
 
@@ -89,6 +128,7 @@
     </a>
 
     <a class="cat-card"
+       data-shop-category="Co-ords"
        style="background-image:url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=900&q=80')"
        href="#shop">
 
@@ -100,6 +140,7 @@
     </a>
 
     <a class="cat-card"
+       data-shop-category="Kurtas"
        style="background-image:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=80')"
        href="#shop">
 
@@ -391,6 +432,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="aura-motion.js"></script>
 <script src="app.js"></script>
 
 </body>
